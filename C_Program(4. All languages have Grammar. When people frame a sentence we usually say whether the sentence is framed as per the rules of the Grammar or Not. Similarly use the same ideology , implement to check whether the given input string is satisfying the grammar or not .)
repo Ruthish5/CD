@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <string.h>
+
+int isBalanced(char* str) {
+    int top = -1;
+    char stack[100];
+
+    for (int i = 0; i < strlen(str); i++) {
+        char ch = str[i];
+
+        if (ch == '(') {
+            stack[++top] = '(';
+        } else if (ch == ')') {
+            if (top == -1) {
+                return 0;
+            }
+            top--;
+        } else {
+            return 0;
+        }
+    }
+
+    return top == -1;
+}
+
+int main() {
+    char input[100];
+    printf("Enter a string (only parentheses): ");
+    scanf("%s", input);
+
+    if (isBalanced(input)) {
+        printf("The input string is grammatically valid (balanced).\n");
+    } else {
+        printf("The input string is grammatically invalid (unbalanced).\n");
+    }
+
+    return 0;
+}
