@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <string.h>
+
+void leftFactoring(char prod[]) {
+    char non_terminal = prod[0];
+    char alpha[10], beta[10];
+    int i = 3, j = 0;
+    while (prod[i] != '|' && prod[i] != '\0') {
+        alpha[j++] = prod[i++];
+    }
+    alpha[j] = '\0';
+
+    if (prod[i] == '\0') {
+        printf("No left factoring needed.\n");
+        return;
+    }
+
+    i++;
+    j = 0;
+    while (prod[i] != '\0') {
+        beta[j++] = prod[i++];
+    }
+    beta[j] = '\0';
+    int k = 0;
+    char common[10];
+    while (alpha[k] == beta[k] && alpha[k] != '\0') {
+        common[k] = alpha[k];
+        k++;
+    }
+    common[k] = '\0';
+
+    if (strlen(common) == 0) {
+        printf("No common prefix. No left factoring needed.\n");
+        return;
+    }
+    printf("\nLeft Factoring applied:\n");
+    printf("%c → %s%c'\n", non_terminal, common, non_terminal);
+    printf("%c' → %s | %s\n", non_terminal, alpha + k, beta + k);
+}
+
+int main() {
+    char production[20];
+
+    printf("Enter production (e.g., A->abc|abd): ");
+    scanf("%s", production);
+
+    leftFactoring(production);
+
+    return 0;
+}
