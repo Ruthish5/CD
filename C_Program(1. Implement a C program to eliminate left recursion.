@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char input[100], left, alpha[10], beta[10];
+    int i = 0, j = 0, k = 0, pos = 0;
+
+    printf("Enter the production (e.g., A->Aa|b): ");
+    scanf("%s", input);
+
+    left = input[0];
+
+    if (input[3] == left) {
+        i = 4;
+        while (input[i] != '|') {
+            alpha[j++] = input[i++];
+        }
+        alpha[j] = '\0';
+
+        i++;
+        while (input[i] != '\0') {
+            beta[k++] = input[i++];
+        }
+        beta[k] = '\0';
+
+        printf("Left recursion detected.\n");
+        printf("Rewritten Grammar:\n");
+        printf("%c -> %s%c'\n", left, beta, left);
+        printf("%c' -> %s%c' | ε\n", left, alpha, left);
+    } else {
+        printf("No left recursion detected in the production.\n");
+    }
+
+    return 0;
+}
