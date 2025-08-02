@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+char *expr;
+int i = 0;
+
+int expression();
+int term();
+int factor();
+
+void error(const char *msg) {
+    printf("Error: %s at position %d\n", msg, i);
+    exit(1);
+}
+
+int number() {
+    int result = 0;
+    if (!isdigit(expr[i])) {
+        error("Expected number");
+    }
+
+    while (isdigit(expr[i])) {
+        result = result * 10 + (expr[i] - '0');
+        i++;
+    }
+
+    return result;
+}
+
+int factor() {
+    int result;
+
+    if (expr[i] == '(') {
+        i++;
+        result = expression();
+
+        if (expr[i] == ')') {
+            i++;
+        } else {
+            error("Expected ')'");
+        }
+
+    } else {
+        result = number();
+    }
+
+    return result;
+}
+
+int term() {
+    int result = factor();
+
+    while (expr[i] == '*' || expr[i] == '/') {
+        char op = expr[i];
+        i++;
+        int next = factor();
+
+        if (op == '*')
+            result *= next;
+        else {
+            if (next == 0) error("Division by zero");
+            result /= next;
+        }
+    }
+
+    return result;
+}
+
+int expression() {
+    int result = term();
+
+    while (expr[i] == '+' || expr[i] == '-') {
+        char op = expr[i];
+        i++;
+        int next = term();
+
+        if (op == '+')
+            result += next;
+        else
+            result -= next;
+    }
+
+    return result;
+}
+
+int main() {
+    char input[100];
+
+    printf("Enter an arithmetic expression (PEMDAS): ");
+    scanf("%s", input);
+    expr = input;
+
+    int result = expression();
+
+    if (expr[i] != '\0') {
+        error("Unexpected characters in input");
+    }
+
+    printf("Result: %d\n", result);
+    return 0;
+}
